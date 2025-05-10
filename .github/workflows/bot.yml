@@ -1,0 +1,24 @@
+name: Order Bot  
+on:  
+  schedule:  
+    - cron: "*/5 * * * *"  # Каждые 5 минут  
+jobs:  
+  run:  
+    runs-on: ubuntu-latest  
+    steps:  
+      - name: Checkout code  
+        uses: actions/checkout@v2  
+      - name: Set up Python  
+        uses: actions/setup-python@v2  
+        with:  
+          python-version: "3.9"  
+      - name: Install dependencies  
+        run: |  
+          pip install gspread google-auth python-telegram-bot  
+      - name: Run bot  
+        env:  
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}  
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}  
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}  
+        run: |  
+          python bot.py  
